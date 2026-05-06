@@ -97,3 +97,15 @@ theorem cbsum (n : ℕ) (hn : 0 ≤ n) : C n = (S n)^2 := by
           simp[hr]
           ring
       _ = (S (n+1))^2 := by rw[sqsum (n+1) (Nat.zero_le (n+1))]
+
+theorem cbsum_formula (n : ℕ) : C n = n^2*(n+1)^2/4 := by
+  rw[cbsum]
+  · rw[sqsum n (Nat.zero_le n)]
+    rw[Nat.div_pow]
+    · ring_nf
+    -- Must now prove that 2 ∣ n*(n+1)
+    obtain ⟨r, hr⟩ := prod_succ_even n
+    use r
+    rw[hr]
+    ring
+  · linarith
