@@ -15,6 +15,7 @@ lemma prod_succ_even (n : ℕ) : Even (n*(n+1)) := by
   dsimp [Even]
   ring
 
+  -- Structure from Lean docs
   cases Nat.even_or_odd n with
   | inl h_even =>
     obtain ⟨k, hk⟩ := h_even
@@ -27,7 +28,7 @@ lemma prod_succ_even (n : ℕ) : Even (n*(n+1)) := by
     rw[hk]
     ring
 
-theorem sqsum (n : ℕ) (hn : 0 ≤ n) : S n = n*(n+1) / 2 := by
+theorem sqsum (n : ℕ) : S n = n*(n+1) / 2 := by
   -- Initiate induction (I know that this is different from Macbeth, but just thought it
   -- would be a good chance to get used to more standard Lean)
   induction n with
@@ -43,7 +44,7 @@ theorem sqsum (n : ℕ) (hn : 0 ≤ n) : S n = n*(n+1) / 2 := by
       calc
         2 * S (n + 1) = 2 * (S n + (n + 1)) := by rw [S]
         _ = 2 * S n + 2 * (n + 1) := by ring
-        _ = 2 * ((r + r) / 2) + 2 * (n + 1) := by rw [ih (Nat.zero_le n), hr]
+        _ = 2 * ((r + r) / 2) + 2 * (n + 1) := by rw [ih, hr]
          -- mul_div_cancel'-- allows the twos to be cancelled, but we must prove divisibility
         _ = (r+r) + 2*(n+1) := by rw[Nat.mul_div_cancel' (h_2_div_r_plus_r)]
         _ = n*(n+1) + 2*(n+1) := by rw[hr]
@@ -56,11 +57,11 @@ theorem sqsum (n : ℕ) (hn : 0 ≤ n) : S n = n*(n+1) / 2 := by
     obtain ⟨r, hr⟩ := this
     calc
     -- norm_num needed since must prove 0 < 2
-      S (n+1) = (S (n+1)*2) / 2 := by rw[Nat.mul_div_cancel]; norm_num
+      S (n+1) = (S (n+1)*2) / 2 := by norm_num
       _ = (2*S (n+1)) / 2 := by ring
       _ = (n+1)*(n+2) / 2 := by rw[h_gauss_times_2]
 
-theorem cbsum (n : ℕ) (hn : 0 ≤ n) : C n = (S n)^2 := by
+theorem cbsum (n : ℕ) : C n = (S n)^2 := by
   -- Induction again :)
   induction n with
   | zero =>
@@ -74,8 +75,8 @@ theorem cbsum (n : ℕ) (hn : 0 ≤ n) : C n = (S n)^2 := by
       ring
     calc
       C (n+1) = C n + (n+1)^3 := by rw[C]
-      _ = (S n)^2 + (n+1)^3 := by rw[ih (Nat.zero_le n)]
-      _ = (n*(n+1)/2)^2 + (n+1)^3 := by rw[sqsum n (Nat.zero_le n)]
+      _ = (S n)^2 + (n+1)^3 := by rw[ih]
+      _ = (n*(n+1)/2)^2 + (n+1)^3 := by rw[sqsum n]
       _ = (n*(n+1)/2)^2 + ((n+1)^3*4)/4 := by rw[Nat.mul_div_cancel]; norm_num
       _ = (n*(n+1))^2 / 4 + ((n+1)^3*4) / 4 := by rw[Nat.div_pow (h_2_div_r_plus_r)];
       _ = ((n*(n+1))^2 + ((n+1)^3*4)) / 4 := by
@@ -96,11 +97,11 @@ theorem cbsum (n : ℕ) (hn : 0 ≤ n) : C n = (S n)^2 := by
           use r
           simp[hr]
           ring
-      _ = (S (n+1))^2 := by rw[sqsum (n+1) (Nat.zero_le (n+1))]
+      _ = (S (n+1))^2 := by rw[sqsum (n+1)]
 
 theorem cbsum_formula (n : ℕ) : C n = n^2*(n+1)^2/4 := by
   rw[cbsum]
-  · rw[sqsum n (Nat.zero_le n)]
+  · rw[sqsum n]
     rw[Nat.div_pow]
     · ring_nf
     -- Must now prove that 2 ∣ n*(n+1)
@@ -108,4 +109,3 @@ theorem cbsum_formula (n : ℕ) : C n = n^2*(n+1)^2/4 := by
     use r
     rw[hr]
     ring
-  · linarith
