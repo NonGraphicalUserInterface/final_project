@@ -1,7 +1,13 @@
+/- ****NOTE: This is not actually the final project. This is just my original idea, the code for which ended up being too short.**** -/
+/- ****For the ACTUAL final project, please see "subofcubes.lean", in this directory.**** -/
+
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic
 
 open Real -- like namespace in C++
+
+
+
 
 /- GOAL: to prove Binet's Theorem for all n ∈ ℕ, n > 0 -/
 

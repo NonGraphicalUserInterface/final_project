@@ -14,7 +14,6 @@ def C
 lemma prod_succ_even (n : ℕ) : Even (n*(n+1)) := by
   dsimp [Even]
   ring
-
   -- Structure from Lean docs
   cases Nat.even_or_odd n with
   | inl h_even =>
@@ -90,7 +89,7 @@ theorem cbsum (n : ℕ) : C n = (S n)^2 := by
           ring
           norm_num
         · norm_num
-      _ = ((n+1)*(n+2))^2 / 4 := by ring
+      _ = ((n+1)*(n+2))^2 / 2^2 := by ring
       _ = ((n+1)*(n+2) / 2)^2 := by
         rw[Nat.div_pow]
         · obtain ⟨r, hr⟩ := prod_succ_even (n+1)
